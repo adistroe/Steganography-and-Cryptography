@@ -93,9 +93,9 @@ fun decodeFromBits(bitList: List<Int>): String {
 /**
  * Encrypts the message with the password (message XOR password)
  * Running the function again will decrypt the message (encryptedMessage XOR password)
- * @return List<Int> containing the bits of the encrypted/decrypted message
+ * @return List<Int> containing the bits of the encrypted message
  */
-fun encryptOrDecryptMessage(message: List<Int>, password: List<Int>): List<Int> {
+fun encryptMessage(message: List<Int>, password: List<Int>): List<Int> {
     val msg = mutableListOf<Int>()
 
     var pwdBit = 0
@@ -106,6 +106,13 @@ fun encryptOrDecryptMessage(message: List<Int>, password: List<Int>): List<Int> 
 
     return msg
 }
+
+/**
+ *  Decrypts the message with the password (message XOR password)
+ *  @return List<Int> containing the bits of the decrypted message
+ */
+fun decryptMessage(message: List<Int>, password: List<Int>): List<Int> = encryptMessage(message, password)
+
 
 /**
  * Checks if the message is too big to fit inside the image
@@ -152,7 +159,7 @@ fun messageFromImage(bufferedImage: BufferedImage, password: List<Int>): String 
         for (x in 0 until imgWidth) {
             if (END_OF_MESSAGE in bitList.joinToString(""))
                 return decodeFromBits(
-                    encryptOrDecryptMessage(
+                    decryptMessage(
                         bitList.dropLast(END_OF_MESSAGE.length),
                         password
                     )
@@ -175,7 +182,7 @@ fun cmdHide() {
     val message = encodeToBits(getUserInput(MSG_TO_HIDE))
     val password = encodeToBits(getUserInput(MSG_PWD))
 
-    val encryptedMessage = encryptOrDecryptMessage(message, password) + END_OF_MESSAGE.map { it.digitToInt() }
+    val encryptedMessage = encryptMessage(message, password) + END_OF_MESSAGE.map { it.digitToInt() }
 
     val inputImage: BufferedImage
     try {
