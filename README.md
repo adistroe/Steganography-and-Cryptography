@@ -1,4 +1,4 @@
-# Steganography-and-Cryptography
+# Steganography and Cryptography
 Completed tutorial project from [JetBrains Academy](https://hyperskill.org/)
 
 <h3>About</h3>
